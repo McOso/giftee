@@ -37,7 +37,7 @@ export default async function handler(req: NextRequest) {
             background: 'linear-gradient(to bottom right, #000000 21.66%, #78716c 86.47%)',
             backgroundClip: 'text',
             color: 'transparent',
-            lineHeight: '5rem',
+            lineHeight: '8rem',
             letterSpacing: '-0.02em',
           }}>
           {siteConfig.name}
@@ -51,6 +51,7 @@ export default async function handler(req: NextRequest) {
             color: 'transparent',
             lineHeight: '5rem',
             letterSpacing: '-0.02em',
+            paddingTop: '1rem',
           }}>
           {siteConfig.description}
         </h3>
