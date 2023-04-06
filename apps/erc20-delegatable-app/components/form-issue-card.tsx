@@ -161,8 +161,8 @@ export function FormIssueCard() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex w-full gap-10">
-          <div className="mb-6 w-2/3">
+        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10">
+          <div className="mb-6 md:w-2/3">
             <label htmlFor="to" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               To
             </label>
@@ -176,7 +176,7 @@ export function FormIssueCard() {
             />
             {rest.formState.errors.to && <p className="text-xs italic text-red-500">{rest.formState.errors.to.message as string}</p>}
           </div>
-          <div className="mb-6 w-1/3">
+          <div className="mb-6 md:w-1/3">
             <label htmlFor="amount" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               Amount of USDC
             </label>
@@ -190,8 +190,8 @@ export function FormIssueCard() {
             />
           </div>
         </div>
-        <div className="flex w-full gap-10">
-          <div className="mb-6 w-1/2">
+        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10">
+          <div className="mb-6 md:w-1/2">
             <label htmlFor="startDate" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               Start Date
             </label>
@@ -204,7 +204,7 @@ export function FormIssueCard() {
             />
             <p className="mt-2 text-xs text-gray-500">Leave empty and the card will be available immediately.</p>
           </div>
-          <div className="mb-6 w-1/2">
+          <div className="mb-6 md:w-1/2">
             <label htmlFor="endDate" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               End Date
             </label>

@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import classNames from 'clsx'
-import { utils } from 'ethers'
+import { ethers, utils } from 'ethers'
 
 import { useAppUserCardsSent } from '@/lib/hooks/app/use-app-users-cards-sent'
 
@@ -9,6 +9,8 @@ import { ButtonRevokeCard } from './button-revoke-card'
 import CardRender from './card-render'
 import { TimeFromUtc } from './shared/time-from-utc'
 import { Dialog, DialogContentXL, DialogTrigger } from './ui/dialog'
+import TimeFromEpoch from './shared/time-from-epoch'
+import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
 
 interface CardsSentProps {
   className?: string
@@ -17,9 +19,22 @@ interface CardsSentProps {
 export const CardsSent = ({ className }: CardsSentProps) => {
   const classes = classNames(className, 'CardsSent')
   const { data } = useAppUserCardsSent()
+  const contractTimestampBeforeEnforcer = useContractAutoLoad('TimestampBeforeEnforcer')
+  const contractTimestampAfterEnforcer = useContractAutoLoad('TimestampAfterEnforcer')
+  
   return (
     <>
       {data?.content?.map((received, index) => {
+        let startTime
+        let endTime
+        received?.delegations?.delegation?.caveats.forEach((caveat: any) => {
+          if (caveat?.enforcer === contractTimestampBeforeEnforcer?.address) {
+            endTime = ethers.BigNumber.from(caveat?.terms).toNumber()
+          }
+          if (caveat?.enforcer === contractTimestampAfterEnforcer?.address) {
+            startTime = ethers.BigNumber.from(caveat?.terms).toNumber()
+          }
+        })
         return (
           <div key={index} className={classes}>
             <div className="card-blue">
@@ -58,12 +73,12 @@ export const CardsSent = ({ className }: CardsSentProps) => {
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-semibold">Start</span>
                               <span className="text-xs">
-                                <TimeFromUtc date={received.createdAt} />
+                                {startTime ? <TimeFromEpoch epoch={startTime} /> : <TimeFromUtc date={received?.createdAt} />}
                               </span>
                             </div>
                             <div className="flex items-center justify-between text-xs">
                               <span className="text-xs font-semibold">Expiration</span>
-                              <span className="text-xs">None</span>
+                              <span className="text-xs">{endTime ? <TimeFromEpoch epoch={endTime} /> : 'Never'}</span>
                             </div>
                           </div>
                           <ButtonRevokeCard signature={received?.delegations?.signedDelegation} delegation={received?.delegations?.delegation} />
