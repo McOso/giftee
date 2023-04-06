@@ -5,6 +5,9 @@ import { useForm } from 'react-hook-form'
 import { useAccount, useNetwork, useSigner } from 'wagmi'
 import * as yup from 'yup'
 
+import { WalletConnect } from './blockchain/wallet-connect'
+import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
+import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-login'
 import { appCardIssue } from '@/lib/app/app-card-issue'
 import { appUserUpdate } from '@/lib/app/app-user-update'
@@ -14,10 +17,6 @@ import { useYupValidationResolver } from '@/lib/useYupValidationResolver'
 import { createDelegation } from '@/lib/utils/create-delegation'
 import { createSalt } from '@/lib/utils/create-salt'
 import { getPermitSignature } from '@/lib/utils/get-permit-signature'
-
-import { WalletConnect } from './blockchain/wallet-connect'
-import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
-import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 
 const validationSchema = yup.object({
   to: yup.string().required('Required'),
@@ -161,7 +160,7 @@ export function FormIssueCard() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10">
+        <div className="flex w-full flex-col gap-2 md:flex-row md:gap-10">
           <div className="mb-6 md:w-2/3">
             <label htmlFor="to" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               To
@@ -190,7 +189,7 @@ export function FormIssueCard() {
             />
           </div>
         </div>
-        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10">
+        <div className="flex w-full flex-col gap-2 md:flex-row md:gap-10">
           <div className="mb-6 md:w-1/2">
             <label htmlFor="startDate" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               Start Date

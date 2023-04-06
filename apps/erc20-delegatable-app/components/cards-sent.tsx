@@ -3,13 +3,12 @@ import * as React from 'react'
 import classNames from 'clsx'
 import { ethers, utils } from 'ethers'
 
-import { useAppUserCardsSent } from '@/lib/hooks/app/use-app-users-cards-sent'
-
 import { ButtonRevokeCard } from './button-revoke-card'
 import CardRender from './card-render'
+import TimeFromEpoch from './shared/time-from-epoch'
 import { TimeFromUtc } from './shared/time-from-utc'
 import { Dialog, DialogContentXL, DialogTrigger } from './ui/dialog'
-import TimeFromEpoch from './shared/time-from-epoch'
+import { useAppUserCardsSent } from '@/lib/hooks/app/use-app-users-cards-sent'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
 
 interface CardsSentProps {
@@ -21,7 +20,7 @@ export const CardsSent = ({ className }: CardsSentProps) => {
   const { data } = useAppUserCardsSent()
   const contractTimestampBeforeEnforcer = useContractAutoLoad('TimestampBeforeEnforcer')
   const contractTimestampAfterEnforcer = useContractAutoLoad('TimestampAfterEnforcer')
-  
+
   return (
     <>
       {data?.content?.map((received, index) => {

@@ -5,6 +5,8 @@ import * as React from 'react'
 
 import Image from 'next/image'
 
+import { BranchColorMode } from '../shared/branch-color-mode'
+import { LinkComponent } from '../shared/link-component'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,9 +16,6 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
 import { cn } from '@/lib/utils'
-
-import { BranchColorMode } from '../shared/branch-color-mode'
-import { LinkComponent } from '../shared/link-component'
 
 export function NavigationMenuGeneral() {
   return (

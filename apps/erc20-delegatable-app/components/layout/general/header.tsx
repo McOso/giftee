@@ -3,12 +3,6 @@ import React from 'react'
 import classNames from 'clsx'
 import Image from 'next/image'
 
-import { BranchIsAuthenticated } from '@/components/shared/branch-is-authenticated'
-import { siteConfig } from '@/config/site'
-import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-login'
-import { ButtonSIWELogout } from '@/integrations/siwe/components/button-siwe-logout'
-import useScroll from '@/lib/hooks/use-scroll'
-
 import { BranchColorMode } from '../../shared/branch-color-mode'
 import { BranchIsWalletConnected } from '../../shared/branch-is-wallet-connected'
 import { LinkComponent } from '../../shared/link-component'
@@ -16,6 +10,11 @@ import { ResponsiveMobileAndDesktop } from '../../shared/responsive-mobile-and-d
 import { ThemeToggle } from '../../shared/theme-toggle'
 import { NavigationMenuGeneral } from '../navigation-menu-general'
 import UserDropdown from '../user-dropdown'
+import { BranchIsAuthenticated } from '@/components/shared/branch-is-authenticated'
+import { siteConfig } from '@/config/site'
+import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-login'
+import { ButtonSIWELogout } from '@/integrations/siwe/components/button-siwe-logout'
+import useScroll from '@/lib/hooks/use-scroll'
 
 interface Props {
   className?: string

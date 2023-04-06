@@ -2,15 +2,14 @@ import React, { useEffect } from 'react'
 
 import { useWaitForTransaction } from 'wagmi'
 
+import { WalletConnect } from './blockchain/wallet-connect'
+import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
+import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-login'
 import { appCardUpdate } from '@/lib/app/app-card-update'
 import { useErc20ManagerRevoke } from '@/lib/blockchain'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
 import { useToast } from '@/lib/hooks/use-toast'
-
-import { WalletConnect } from './blockchain/wallet-connect'
-import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
-import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 
 export function ButtonRevokeCard({ cid, delegation, signature }: any) {
   const { toast } = useToast()

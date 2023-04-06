@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { prisma } from '@/lib/prisma'
-
 import { withSessionRoute } from '../../lib/server'
+import { prisma } from '@/lib/prisma'
 
 export default withSessionRoute(async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
