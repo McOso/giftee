@@ -5,19 +5,18 @@ import { useForm } from 'react-hook-form'
 import { useNetwork, useSigner, useWaitForTransaction } from 'wagmi'
 import * as yup from 'yup'
 
-import { WalletConnect } from './blockchain/wallet-connect'
-import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
-import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-login'
 import { appCardUpdate } from '@/lib/app/app-card-update'
 import { useErc20Manager, useErc20ManagerInvoke, useErc20PermitAllowance } from '@/lib/blockchain'
 import { useAppGetUser } from '@/lib/hooks/app/use-app-get-user'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
+import { useToast } from '@/lib/hooks/use-toast'
 import { useYupValidationResolver } from '@/lib/useYupValidationResolver'
 import { createIntention } from '@/lib/utils/create-intention'
-import { useToast } from '@/lib/hooks/use-toast'
 
-
+import { WalletConnect } from './blockchain/wallet-connect'
+import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
+import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 
 const validationSchema = yup.object({
   to: yup.string(),
@@ -32,19 +31,13 @@ export function FormClaimCard({ cid, delegationData }: FormClaimCardProps) {
   const { toast } = useToast()
   const resolver = useYupValidationResolver(validationSchema)
   const { handleSubmit, register, setError, formState, reset } = useForm({ resolver })
-
   const [intentionData, setIntentionData] = useState<any>()
-
   const contract = useContractAutoLoad('ERC20Manager')
   const managerContract = useErc20Manager({ address: contract?.address })
-
   const contractUSDC = useContractAutoLoad('USDC')
-
   const { chain } = useNetwork()
   const signer = useSigner()
-
   const { data: issuerUserData } = useAppGetUser(delegationData.from)
-
 
   const { data: allowance } = useErc20PermitAllowance({
     address: contractUSDC?.address,
@@ -66,15 +59,15 @@ export function FormClaimCard({ cid, delegationData }: FormClaimCardProps) {
     })
   }, [data])
 
-useEffect( () => { 
-  if(error) {
-    reset()
-    toast({
-      title: "Transaction Error",
-      description: "The transaction has failed.",
-    })
-  }
-}, [error])
+  useEffect(() => {
+    if (error) {
+      reset()
+      toast({
+        title: 'Transaction Error',
+        description: 'The transaction has failed.',
+      })
+    }
+  }, [error])
 
   const { isSuccess, data: receipt } = useWaitForTransaction({
     hash: data?.hash,
@@ -116,18 +109,17 @@ useEffect( () => {
       chain?.id as number,
       approveTrxPopulated
     )
-    // @ts-ignore
     try {
-      const signedIntention = await signer.data?.provider.send(method, [await signer.data?.getAddress(), intention.string])
+      // @ts-ignore
+      const signedIntention = await signer?.data?.provider.send(method, [await signer.data?.getAddress(), intention.string])
       setIntentionData({ invocations: { ...intention.intention }, signature: signedIntention })
     } catch (error) {
       toast({
-        title: "Signature Rejected",
-        description: "You have rejected the signature request.",
+        title: 'Signature Rejected',
+        description: 'You have rejected the signature request.',
       })
     }
   }
-
 
   useEffect(() => {
     if (intentionData && write) {
@@ -135,15 +127,14 @@ useEffect( () => {
     }
   }, [intentionData])
 
-
-  useEffect( () => { 
-    if(formState.isSubmitSuccessful && isError) {
+  useEffect(() => {
+    if (formState.isSubmitSuccessful && isError) {
       reset()
     }
   }, [isError])
 
-  useEffect( () => { 
-    if(formState.isSubmitSuccessful && isSuccess) {
+  useEffect(() => {
+    if (formState.isSubmitSuccessful && isSuccess) {
       reset()
     }
   }, [formState.isSubmitSuccessful])
@@ -172,16 +163,17 @@ useEffect( () => {
           <BranchIsWalletConnected>
             {formState.isSubmitted ? (
               <button type="button" className="btn btn-emerald w-full">
-                {
-                  isSuccess ? (
-                    <span className=''>Complete</span>
-                  ) : (
-                    <div className='flex items-center justify-center gap-3 w-full'><span className=''>Executing transaction</span><svg className="h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v1a7 7 0 00-7 7h1z"></path>
-                  </svg></div>
-                  ) 
-                }
+                {isSuccess ? (
+                  <span className="">Complete</span>
+                ) : (
+                  <div className="flex w-full items-center justify-center gap-3">
+                    <span className="">Executing transaction</span>
+                    <svg className="h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v1a7 7 0 00-7 7h1z"></path>
+                    </svg>
+                  </div>
+                )}
               </button>
             ) : (
               <button type="submit" className="btn btn-emerald w-full">

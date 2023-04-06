@@ -3,13 +3,14 @@ import * as React from 'react'
 import classNames from 'clsx'
 import { ethers, utils } from 'ethers'
 
+import { useAppUserCardsReceived } from '@/lib/hooks/app/use-app-users-cards-received'
+import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
+
 import CardRender from './card-render'
 import { FormClaimCard } from './form-claim-card'
 import TimeFromEpoch from './shared/time-from-epoch'
 import { TimeFromUtc } from './shared/time-from-utc'
 import { Dialog, DialogContent, DialogContentXL, DialogTrigger } from './ui/dialog'
-import { useAppUserCardsReceived } from '@/lib/hooks/app/use-app-users-cards-received'
-import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
 
 interface CardsReceivedProps {
   className?: string

@@ -2,14 +2,15 @@ import React, { useEffect } from 'react'
 
 import { useWaitForTransaction } from 'wagmi'
 
-import { WalletConnect } from './blockchain/wallet-connect'
-import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
-import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-login'
 import { appCardUpdate } from '@/lib/app/app-card-update'
 import { useErc20ManagerRevoke } from '@/lib/blockchain'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
 import { useToast } from '@/lib/hooks/use-toast'
+
+import { WalletConnect } from './blockchain/wallet-connect'
+import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
+import { BranchIsWalletConnected } from './shared/branch-is-wallet-connected'
 
 export function ButtonRevokeCard({ cid, delegation, signature }: any) {
   const { toast } = useToast()
@@ -32,12 +33,12 @@ export function ButtonRevokeCard({ cid, delegation, signature }: any) {
     ],
   })
 
-  useEffect( () => { 
-    if(error) {
+  useEffect(() => {
+    if (error) {
       toast({
-        variant: "destructive",
-        title: "Transaction Error",
-        description: error.message || "The transaction has failed.",
+        variant: 'destructive',
+        title: 'Transaction Error',
+        description: error.message || 'The transaction has failed.',
       })
     }
   }, [error])
@@ -67,16 +68,17 @@ export function ButtonRevokeCard({ cid, delegation, signature }: any) {
       <BranchIsAuthenticated>
         <BranchIsWalletConnected>
           <>
-            {isLoading ? <button type="button" className="btn btn-red w-full">
+            {isLoading ? (
+              <button type="button" className="btn btn-red w-full">
                 Revoking...
-              </button> : null}
-            {isSuccess ? <div className="text-green-500">Revoked</div>: null}
+              </button>
+            ) : null}
+            {isSuccess ? <div className="text-green-500">Revoked</div> : null}
             {!isSuccess && !isLoading ? (
               <button type="button" className="btn btn-red w-full" onClick={handleRevoke}>
                 Revoke
               </button>
-            ): null
-            }
+            ) : null}
           </>
           <WalletConnect />
         </BranchIsWalletConnected>

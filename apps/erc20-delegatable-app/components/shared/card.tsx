@@ -5,8 +5,9 @@ import { motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import Balancer from 'react-wrap-balancer'
 
-import { LinkComponent } from './link-component'
 import { FADE_UP_ANIMATION_VARIANTS } from '@/config/design'
+
+import { LinkComponent } from './link-component'
 
 export default function Card({
   title,
