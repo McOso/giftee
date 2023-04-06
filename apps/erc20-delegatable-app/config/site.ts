@@ -18,9 +18,9 @@ export const SITE_CANONICAL = 'https://turboeth.xyz'
 
 export const siteConfig: SiteConfig = {
   name: 'giftee',
-  title: 'giftee 🧧 magical gift cards',
+  title: 'giftee 💳 magical gift cards',
   tagline: 'magical gift cards',
-  emoji: '🧧',
+  emoji: '💳',
   description: 'a magical way to send USDC gift cards.',
   localeDefault: 'en',
   links: {

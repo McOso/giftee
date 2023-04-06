@@ -1,7 +1,7 @@
 import { siteConfig } from '@/config/site'
 
 export default function Head() {
-  const url = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  const url = 'https://www.giftee.cards' || 'http://localhost:3000'
   const ogUrl = new URL(`${url}/api/og`)
 
   return (
