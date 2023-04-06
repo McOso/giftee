@@ -15,6 +15,9 @@ import { useAppGetUser } from '@/lib/hooks/app/use-app-get-user'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
 import { useYupValidationResolver } from '@/lib/useYupValidationResolver'
 import { createIntention } from '@/lib/utils/create-intention'
+import { useToast } from '@/lib/hooks/use-toast'
+
+
 
 const validationSchema = yup.object({
   to: yup.string(),
@@ -26,8 +29,9 @@ interface FormClaimCardProps {
 }
 
 export function FormClaimCard({ cid, delegationData }: FormClaimCardProps) {
+  const { toast } = useToast()
   const resolver = useYupValidationResolver(validationSchema)
-  const { handleSubmit, register, setError, formState } = useForm({ resolver })
+  const { handleSubmit, register, setError, formState, reset } = useForm({ resolver })
 
   const [intentionData, setIntentionData] = useState<any>()
 
@@ -41,14 +45,13 @@ export function FormClaimCard({ cid, delegationData }: FormClaimCardProps) {
 
   const { data: issuerUserData } = useAppGetUser(delegationData.from)
 
-  console.log(issuerUserData, 'issuerUserData')
 
   const { data: allowance } = useErc20PermitAllowance({
     address: contractUSDC?.address,
     args: [delegationData.from as `0x${string}`, contract?.address],
   })
 
-  const { write, data } = useErc20ManagerInvoke({
+  const { write, data, isError, error, ...rest } = useErc20ManagerInvoke({
     address: contract.address,
     args: [[intentionData]],
     overrides: { gasLimit: BigNumber.from(1000000) },
@@ -63,12 +66,21 @@ export function FormClaimCard({ cid, delegationData }: FormClaimCardProps) {
     })
   }, [data])
 
+useEffect( () => { 
+  if(error) {
+    reset()
+    toast({
+      title: "Transaction Error",
+      description: "The transaction has failed.",
+    })
+  }
+}, [error])
+
   const { isSuccess, data: receipt } = useWaitForTransaction({
     hash: data?.hash,
   })
 
   useEffect(() => {
-    console.log(isSuccess)
     if (isSuccess) {
       appCardUpdate({
         id: cid,
@@ -105,15 +117,36 @@ export function FormClaimCard({ cid, delegationData }: FormClaimCardProps) {
       approveTrxPopulated
     )
     // @ts-ignore
-    const signedIntention = await signer.data?.provider.send(method, [await signer.data?.getAddress(), intention.string])
-    setIntentionData({ invocations: { ...intention.intention }, signature: signedIntention })
+    try {
+      const signedIntention = await signer.data?.provider.send(method, [await signer.data?.getAddress(), intention.string])
+      setIntentionData({ invocations: { ...intention.intention }, signature: signedIntention })
+    } catch (error) {
+      toast({
+        title: "Signature Rejected",
+        description: "You have rejected the signature request.",
+      })
+    }
   }
+
 
   useEffect(() => {
     if (intentionData && write) {
       write()
     }
   }, [intentionData])
+
+
+  useEffect( () => { 
+    if(formState.isSubmitSuccessful && isError) {
+      reset()
+    }
+  }, [isError])
+
+  useEffect( () => { 
+    if(formState.isSubmitSuccessful && isSuccess) {
+      reset()
+    }
+  }, [formState.isSubmitSuccessful])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -138,13 +171,22 @@ export function FormClaimCard({ cid, delegationData }: FormClaimCardProps) {
         <BranchIsAuthenticated>
           <BranchIsWalletConnected>
             {formState.isSubmitted ? (
-              <button type="button" className="btn btn-emerald">
-                Submitting the Transaction
+              <button type="button" className="btn btn-emerald w-full">
+                {
+                  isSuccess ? (
+                    <span className=''>Complete</span>
+                  ) : (
+                    <div className='flex items-center justify-center gap-3 w-full'><span className=''>Executing transaction</span><svg className="h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v1a7 7 0 00-7 7h1z"></path>
+                  </svg></div>
+                  ) 
+                }
               </button>
             ) : (
               <button type="submit" className="btn btn-emerald w-full">
                 {formState.isSubmitting ? (
-                  <svg className="-ml-1 mr-3 h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="mx-auto h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v1a7 7 0 00-7 7h1z"></path>
                   </svg>

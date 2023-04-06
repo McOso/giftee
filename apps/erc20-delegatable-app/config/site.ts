@@ -17,14 +17,14 @@ interface SiteConfig {
 export const SITE_CANONICAL = 'https://turboeth.xyz'
 
 export const siteConfig: SiteConfig = {
-  name: 'coincards',
-  title: 'coincards 🪙 magical gift cards',
+  name: 'giftee',
+  title: 'giftee 🧧 magical gift cards',
   tagline: 'magical gift cards',
-  emoji: '🪙',
+  emoji: '🧧',
   description: 'a magical way to send USDC gift cards.',
   localeDefault: 'en',
   links: {
     twitter: 'https://twitter.com/mcoso_',
-    github: 'https://github.com/mcoso/coincards',
+    github: 'https://github.com/mcoso/giftee',
   },
 }

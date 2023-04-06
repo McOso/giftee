@@ -17,11 +17,7 @@ export async function createSalt(signer: ethers.Signer) {
     ])
   )
 
-  console.log('hash', hash)
-
   const splice = ethers.utils.hexDataSlice(hash, 0, 12)
-
-  console.log('splice', splice)
 
   return ethers.utils.hexZeroPad(splice, 32)
 }

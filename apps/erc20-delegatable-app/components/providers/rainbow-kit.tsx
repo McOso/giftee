@@ -17,11 +17,6 @@ interface Props {
   autoConnect?: boolean
 }
 
-const cb = coinbaseWallet({ chains, appName: siteConfig.name })
-// console.log(cb.createConnector(), 'cbcb')
-
-export const cbAtom = atom(cb)
-
 const connectors = connectorsForWallets([
   {
     groupName: 'Recommended',

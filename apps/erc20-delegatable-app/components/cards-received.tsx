@@ -18,7 +18,6 @@ interface CardsReceivedProps {
 export const CardsReceived = ({ className }: CardsReceivedProps) => {
   const classes = classNames(className, 'CardsReceived')
   const { data } = useAppUserCardsReceived()
-
   const contractTimestampBeforeEnforcer = useContractAutoLoad('TimestampBeforeEnforcer')
   const contractTimestampAfterEnforcer = useContractAutoLoad('TimestampAfterEnforcer')
 

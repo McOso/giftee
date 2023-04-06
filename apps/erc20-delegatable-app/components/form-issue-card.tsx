@@ -48,17 +48,11 @@ export function FormIssueCard() {
     args: [issuerAddress as `0x${string}`, contract?.address],
   })
 
-  console.log('allowance', allowance)
-
   const { chain } = useNetwork()
   const signer = useSigner()
 
   const onSubmit = async (data: any) => {
     setIsSubmitting(true)
-
-    console.log('data input', data)
-
-    console.log('permit nonce', permitNonce?.toString())
 
     // check if valid send to address
     if (!ethers.utils.isAddress(data.to)) {
@@ -71,15 +65,9 @@ export function FormIssueCard() {
 
     const inputTerms = ethers.utils.hexZeroPad(rawUSDCAmount.toHexString(), 32)
 
-    console.log('input terms', inputTerms)
-
     const salt = await createSalt(signer?.data as ethers.Signer)
 
-    console.log('salt', salt)
-
     const termsWithSalt = ethers.utils.hexConcat([inputTerms, salt])
-
-    console.log('termsWithSalt', termsWithSalt)
 
     const enforcers = [
       {
@@ -92,7 +80,6 @@ export function FormIssueCard() {
     if (data.startDate) {
       // handle start date enforcer
       const time = new Date(data.startDate).getTime() / 1000
-      console.log('start time', time)
       const timestampAfterRawValue = ethers.utils.hexZeroPad(ethers.utils.hexValue(time), 8)
 
       enforcers.push({
@@ -104,7 +91,6 @@ export function FormIssueCard() {
     if (data.endDate) {
       // handle end date enforcer
       const time = new Date(data.endDate).getTime() / 1000
-      console.log('end time', time)
       const timestampBeforeRawValue = ethers.utils.hexZeroPad(ethers.utils.hexValue(time), 8)
       enforcers.push({
         enforcer: contractTimestampBeforeEnforcer.address,
@@ -142,14 +128,10 @@ export function FormIssueCard() {
       )
       signature = sig
 
-      console.log('approveTrxPopulated data', approveTrxPopulated?.data)
-
       appUserUpdate({ allowanceTrx: approveTrxPopulated?.data })
     }
 
     const delegation = createDelegation(data.to, contract.address, chain?.id as number, enforcers)
-
-    console.log(delegation)
     // @ts-ignore
     const signedDelegation = await signer.data?.provider?.send(method, [me, delegation.string])
 
@@ -177,17 +159,6 @@ export function FormIssueCard() {
 
   return (
     <>
-      {signatures && (
-        <div className="text-sm">
-          <span className="block break-all">
-            Delegation: <br /> {signatures.delegation}
-          </span>
-          <span className="block break-all">
-            Invocation: <br /> {signatures.invocation}
-          </span>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex w-full gap-10">
           <div className="mb-6 w-2/3">
@@ -251,13 +222,13 @@ export function FormIssueCard() {
           <BranchIsAuthenticated>
             <BranchIsWalletConnected>
               {rest.formState.isSubmitted ? (
-                <button type="button" className="btn btn-emerald">
-                  Crypto Card Sent
+                <button type="button" className="btn btn-emerald btn-lg w-full">
+                  Card Sent 🥳
                 </button>
               ) : (
-                <button type="submit" className="btn btn-emerald w-full">
+                <button type="submit" className="btn btn-emerald w-full text-center">
                   {rest.formState.isSubmitting || isSubmitting ? (
-                    <svg className="-ml-1 mr-3 h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 animate-spin mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v1a7 7 0 00-7 7h1z"></path>
                     </svg>

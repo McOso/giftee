@@ -9,8 +9,11 @@ import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-logi
 import { appCardUpdate } from '@/lib/app/app-card-update'
 import { useErc20ManagerRevoke } from '@/lib/blockchain'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
+import { useToast } from '@/lib/hooks/use-toast'
 
 export function ButtonRevokeCard({ cid, delegation, signature }: any) {
+  const { toast } = useToast()
+
   const handleRevoke = async (data: any) => {
     if (!contract) return
     if (!write) return
@@ -19,7 +22,7 @@ export function ButtonRevokeCard({ cid, delegation, signature }: any) {
 
   const contract = useContractAutoLoad('ERC20Manager')
   // @ts-ignore
-  const { write, data, isLoading } = useErc20ManagerRevoke({
+  const { write, data, error, isLoading } = useErc20ManagerRevoke({
     address: contract?.address,
     args: [
       {
@@ -28,6 +31,16 @@ export function ButtonRevokeCard({ cid, delegation, signature }: any) {
       },
     ],
   })
+
+  useEffect( () => { 
+    if(error) {
+      toast({
+        variant: "destructive",
+        title: "Transaction Error",
+        description: error.message || "The transaction has failed.",
+      })
+    }
+  }, [error])
 
   useEffect(() => {
     appCardUpdate({
@@ -54,13 +67,16 @@ export function ButtonRevokeCard({ cid, delegation, signature }: any) {
       <BranchIsAuthenticated>
         <BranchIsWalletConnected>
           <>
-            {isLoading ? <div className="text-gray-500">Revoking...</div> : null}
-            {!isSuccess ? null : <div className="text-green-500">Revoked</div>}
-            {isSuccess ? null : (
+            {isLoading ? <button type="button" className="btn btn-red w-full">
+                Revoking...
+              </button> : null}
+            {isSuccess ? <div className="text-green-500">Revoked</div>: null}
+            {!isSuccess && !isLoading ? (
               <button type="button" className="btn btn-red w-full" onClick={handleRevoke}>
                 Revoke
               </button>
-            )}
+            ): null
+            }
           </>
           <WalletConnect />
         </BranchIsWalletConnected>

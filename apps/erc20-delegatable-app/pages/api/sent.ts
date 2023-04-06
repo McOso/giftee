@@ -15,6 +15,8 @@ export default withSessionRoute(async function handler(req: NextApiRequest, res:
       const cards = await prisma.card.findMany({
         where: {
           from: address,
+          isRevoked: false,
+          isClaimed: false,
         },
       })
 

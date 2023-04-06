@@ -8,18 +8,18 @@ datasource db {
 }
 
 model User {
-  id            String   @id @map("_id")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  address       String
-  allowanceTrx  String?
+  id           String   @id @map("_id")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  address      String
+  allowanceTrx String?
 }
 
 model Card {
   id                 String   @id @default(cuid()) @map("_id")
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
-  chainId            String  @default("137")
+  chainId            String   @default("137")
   from               String
   to                 String
   token              String

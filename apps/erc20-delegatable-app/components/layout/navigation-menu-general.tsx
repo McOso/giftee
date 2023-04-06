@@ -34,7 +34,7 @@ export function NavigationMenuGeneral() {
                         <br /> A Magical Experience
                       </div>
                       <p className="mb-3 text-sm leading-tight text-white/90">
-                        Coincards is a digital gift card platform that allows you to send and receive gift cards from your favorite Web3 wallet
+                        Giftee is a digital gift card platform that allows you to send and receive gift cards from your favorite Web3 wallet
                         without submittig an onchain transaction.
                       </p>
                       <p className="text-sm font-bold leading-tight text-white/90">A new world of possibilities!</p>
@@ -48,6 +48,9 @@ export function NavigationMenuGeneral() {
                   <div className="my-2" />
                   <p className="text-xs">
                     Delegatable is a Solidity framework for extending smart contracts with counterfactual revocable-delegation
+                  </p>
+                  <p className="text-xs">
+                    Giftee is powered by Delegatable.
                   </p>
                 </div>
               </LinkComponent>
