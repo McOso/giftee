@@ -7,10 +7,10 @@ import CardRender from './card-render'
 import { FormClaimCard } from './form-claim-card'
 import TimeFromEpoch from './shared/time-from-epoch'
 import { TimeFromUtc } from './shared/time-from-utc'
-import { Dialog, DialogContent, DialogContentXL, DialogTrigger } from './ui/dialog'
+import { Dialog, DialogContentXL, DialogTrigger } from './ui/dialog'
 import { useAppUserCardsReceived } from '@/lib/hooks/app/use-app-users-cards-received'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
-import { Address } from '@turbo-eth/core-wagmi'
+import { EnsName } from './ui/EnsName'
 
 interface CardsReceivedProps {
   className?: string
@@ -95,7 +95,7 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
                 <div className="">
                   <span className="text-xs">
                     <span className="font-bold">from</span> <br />
-                    <Address address={card.from} truncate className="text-sm" />
+                    <EnsName address={card.to} truncate className="text-sm" />
                   </span>
                 </div>
               </div>
