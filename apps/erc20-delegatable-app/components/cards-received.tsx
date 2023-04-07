@@ -10,6 +10,7 @@ import { TimeFromUtc } from './shared/time-from-utc'
 import { Dialog, DialogContent, DialogContentXL, DialogTrigger } from './ui/dialog'
 import { useAppUserCardsReceived } from '@/lib/hooks/app/use-app-users-cards-received'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
+import { Address } from '@turbo-eth/core-wagmi'
 
 interface CardsReceivedProps {
   className?: string
@@ -94,7 +95,7 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
                 <div className="">
                   <span className="text-xs">
                     <span className="font-bold">from</span> <br />
-                    {card.from}
+                    <Address address={card.from} truncate className="text-sm" />
                   </span>
                 </div>
               </div>
