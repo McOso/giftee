@@ -71,7 +71,7 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
                           </div>
                         </div>
                         <div className="col-span-12 md:col-span-7">
-                          <CardRender to={card.to} amount={card.amount} decimals={card.decimals} />
+                          <CardRender to={card.to} amount={card.amount} decimals={card.decimals} label="from" />
                           <div className="my-4 flex flex-col gap-2">
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-semibold">Start</span>
