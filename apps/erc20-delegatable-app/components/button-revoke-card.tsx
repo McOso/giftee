@@ -49,7 +49,7 @@ export function ButtonRevokeCard({ cid, delegation, signature }: any) {
     })
   }, [data])
 
-  const { isSuccess } = useWaitForTransaction({
+  const { isSuccess, data: receipt } = useWaitForTransaction({
     hash: data?.hash,
   })
 
@@ -58,6 +58,7 @@ export function ButtonRevokeCard({ cid, delegation, signature }: any) {
       appCardUpdate({
         id: cid,
         isRevoked: true,
+        revokedReceipt: receipt,
       })
     }
   }, [isSuccess])

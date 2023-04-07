@@ -15,6 +15,7 @@ export default withSessionRoute(async function handler(req: NextApiRequest, res:
         where: {
           to: address,
           isClaimed: false,
+          isRevoked: false,
         },
       })
 

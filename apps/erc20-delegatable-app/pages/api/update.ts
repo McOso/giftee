@@ -16,8 +16,12 @@ export default withSessionRoute(async function handler(req: NextApiRequest, res:
         },
         data: {
           // @ts-ignore
-          hash: req.body.hash,
           isClaimed: req.body.isClaimed,
+          claimedReceipt: req.body.claimedReceipt,
+          claimedHash: req.body.claimedHash,
+          revokedHash: req.body.revokedHash,
+          isRevoked: req.body.isRevoked,
+          revokedReceipt: req.body.revokedReceipt,
         },
       })
       return res.json({ content: data, object: 'Delegation' })
