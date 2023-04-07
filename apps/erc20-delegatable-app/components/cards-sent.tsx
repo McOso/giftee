@@ -81,7 +81,11 @@ export const CardsSent = ({ className }: CardsSentProps) => {
                               <span className="text-xs">{endTime ? <TimeFromEpoch epoch={endTime} /> : 'Never'}</span>
                             </div>
                           </div>
-                          <ButtonRevokeCard cid={received?.id} signature={received?.delegations?.signedDelegation} delegation={received?.delegations?.delegation} />
+                          <ButtonRevokeCard
+                            cid={received?.id}
+                            signature={received?.delegations?.signedDelegation}
+                            delegation={received?.delegations?.delegation}
+                          />
                         </div>
                       </div>
                     </DialogContentXL>
