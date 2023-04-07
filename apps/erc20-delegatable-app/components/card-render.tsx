@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import classNames from 'clsx'
 import { utils } from 'ethers'
+
 import { EnsName } from './ui/EnsName'
 
 interface CardRenderProps {

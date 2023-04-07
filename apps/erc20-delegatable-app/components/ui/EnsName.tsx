@@ -1,30 +1,24 @@
-import * as React from 'react';
-import classNames from 'clsx';
-import { useEnsName } from 'wagmi';
-import { Address } from '@turbo-eth/core-wagmi';
+import * as React from 'react'
+
+import { Address } from '@turbo-eth/core-wagmi'
+import classNames from 'clsx'
+import { useEnsName } from 'wagmi'
 
 interface EnsNameProps {
-  className?: string;
-  address: `0x${string}`;
-  truncate?: boolean;
-  chainId?: number;
+  className?: string
+  address: `0x${string}`
+  truncate?: boolean
+  chainId?: number
 }
 
-export const EnsName = ({
-  className,
-  address,
-  truncate = false,
-  chainId = 1,
-}: EnsNameProps) => {
-  const classes = classNames(className, 'EnsName');
+export const EnsName = ({ className, address, truncate = false, chainId = 1 }: EnsNameProps) => {
+  const classes = classNames(className, 'EnsName')
   const { data, isSuccess } = useEnsName({
     address: address,
     chainId: chainId,
-  });
+  })
   if (!data || !isSuccess) {
-    return (
-      <Address truncate={truncate} address={address} className={classes} />
-    );
+    return <Address truncate={truncate} address={address} className={classes} />
   }
-  return <span className={classes}>{data}</span>;
-};
+  return <span className={classes}>{data}</span>
+}

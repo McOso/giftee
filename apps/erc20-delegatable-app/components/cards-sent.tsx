@@ -8,9 +8,9 @@ import CardRender from './card-render'
 import TimeFromEpoch from './shared/time-from-epoch'
 import { TimeFromUtc } from './shared/time-from-utc'
 import { Dialog, DialogContentXL, DialogTrigger } from './ui/dialog'
+import { EnsName } from './ui/EnsName'
 import { useAppUserCardsSent } from '@/lib/hooks/app/use-app-users-cards-sent'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
-import { EnsName } from './ui/EnsName'
 
 interface CardsSentProps {
   className?: string
@@ -49,9 +49,9 @@ export const CardsSent = ({ className }: CardsSentProps) => {
                     <DialogTrigger>
                       <button className="tag tag-light">Revoke</button>
                     </DialogTrigger>
-                    <DialogContentXL className="overflow-y-auto h-screen sm:max-h-[550px] md:p-10">
+                    <DialogContentXL className="h-screen overflow-y-auto sm:max-h-[550px] md:p-10">
                       <div className="grid grid-cols-12 md:gap-x-10">
-                        <div className="mb-2 col-span-12 md:col-span-5">
+                        <div className="col-span-12 mb-2 md:col-span-5">
                           <h3 className="text-4xl font-normal">How It Works</h3>
                           <hr className="my-4" />
                           <div className="content text-xs">
