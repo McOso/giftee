@@ -3,14 +3,17 @@ import * as React from 'react'
 import classNames from 'clsx'
 import { utils } from 'ethers'
 
+import { EnsName } from './ui/EnsName'
+
 interface CardRenderProps {
   className?: string
   to?: string
   decimals?: number
   amount: number
+  label: string
 }
 
-export const CardRender = ({ className, to, decimals, amount }: CardRenderProps) => {
+export const CardRender = ({ className, to, decimals, amount, label }: CardRenderProps) => {
   const classes = classNames(className, 'CardRender')
   return (
     <div className={classes}>
@@ -25,8 +28,8 @@ export const CardRender = ({ className, to, decimals, amount }: CardRenderProps)
         <div className="">
           <div className="">
             <span className="text-xs">
-              <span className="font-bold">to</span> <br />
-              {to}
+              <span className="font-bold">{label}</span> <br />
+              <EnsName address={to as `0x${string}`} truncate className="text-sm" />
             </span>
           </div>
         </div>
