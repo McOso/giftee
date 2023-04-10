@@ -50,6 +50,12 @@ export function Header(props: Props) {
               )}
             </LinkComponent>
             <div className="">
+              <BranchIsWalletConnected>
+                <BranchIsAuthenticated>
+                  <ButtonSIWELogout />
+                  <ButtonSIWELogin />
+                </BranchIsAuthenticated>
+              </BranchIsWalletConnected>
               <ThemeToggle />
             </div>
           </div>
