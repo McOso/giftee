@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { BigNumber, ethers } from 'ethers'
 import { useForm } from 'react-hook-form'
-import { useAccount, useNetwork, useSigner } from 'wagmi'
+import { useAccount, useEnsAddress, useNetwork, useSigner } from 'wagmi'
 import * as yup from 'yup'
 
 import { WalletConnect } from './blockchain/wallet-connect'
@@ -25,10 +25,12 @@ const validationSchema = yup.object({
 
 export function FormIssueCard() {
   const resolver = useYupValidationResolver(validationSchema)
-  const { handleSubmit, register, setValue, setError, ...rest } = useForm({ resolver })
+  const { handleSubmit, register, setValue, setError, watch, ...rest } = useForm({ resolver })
 
   const [isSubmitting, setIsSubmitting] = useState<Boolean>(false)
   const [signatures, setSignatures] = useState<any>()
+
+  const ensNameWatch = watch('to')
 
   const contract = useContractAutoLoad('ERC20Manager')
   const managerContract = useErc20Manager({ address: contract?.address })
@@ -48,6 +50,12 @@ export function FormIssueCard() {
     args: [issuerAddress as `0x${string}`, contract?.address],
   })
 
+  const { data: ensAddress } = useEnsAddress({
+    name: ensNameWatch,
+    chainId: 1,
+    enabled: Boolean(ensNameWatch),
+  })
+
   const { chain } = useNetwork()
   const signer = useSigner()
 
@@ -55,7 +63,7 @@ export function FormIssueCard() {
     setIsSubmitting(true)
 
     // check if valid send to address
-    if (!ethers.utils.isAddress(data.to)) {
+    if (!ensAddress || !ethers.utils.isAddress(ensAddress)) {
       setError('to', { type: 'manual', message: 'Invalid address' })
       setIsSubmitting(false)
       return false
@@ -131,7 +139,7 @@ export function FormIssueCard() {
       appUserUpdate({ allowanceTrx: approveTrxPopulated?.data })
     }
 
-    const delegation = createDelegation(data.to, contract.address, chain?.id as number, enforcers)
+    const delegation = createDelegation(ensAddress, contract.address, chain?.id as number, enforcers)
     // @ts-ignore
     const signedDelegation = await signer.data?.provider?.send(method, [me, delegation.string])
 
@@ -143,7 +151,7 @@ export function FormIssueCard() {
 
     const formData = {
       from: me,
-      to: data.to,
+      to: ensAddress,
       token: 'USDC',
       decimals: '6',
       amount: rawUSDCAmount.toString(),
@@ -170,7 +178,7 @@ export function FormIssueCard() {
               type="text"
               id="to"
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-              placeholder="0xd61FA937b8f648901D354f48f6b14995fE468bF3"
+              placeholder="mcoso.eth or 0xd61FA937b8f648901D354f48f6b14995fE468bF3"
               required
             />
             {rest.formState.errors.to && <p className="text-xs italic text-red-500">{rest.formState.errors.to.message as string}</p>}
