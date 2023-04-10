@@ -95,7 +95,7 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
                 <div className="">
                   <span className="text-xs">
                     <span className="font-bold">from</span> <br />
-                    <EnsName address={card.to} truncate className="text-sm" />
+                    <EnsName address={card.from} truncate className="text-sm" />
                   </span>
                 </div>
               </div>
