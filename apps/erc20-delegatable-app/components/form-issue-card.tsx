@@ -63,7 +63,7 @@ export function FormIssueCard() {
     setIsSubmitting(true)
 
     // check if valid send to address
-    if (!ensAddress || !ethers.utils.isAddress(ensAddress)) {    
+    if (!ensAddress || !ethers.utils.isAddress(ensAddress)) {
       setError('to', { type: 'manual', message: 'Invalid address' })
       setIsSubmitting(false)
       return false
@@ -178,7 +178,7 @@ export function FormIssueCard() {
               type="text"
               id="to"
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-              placeholder="0xd61FA937b8f648901D354f48f6b14995fE468bF3"
+              placeholder="mcoso.eth or 0xd61FA937b8f648901D354f48f6b14995fE468bF3"
               required
             />
             {rest.formState.errors.to && <p className="text-xs italic text-red-500">{rest.formState.errors.to.message as string}</p>}
