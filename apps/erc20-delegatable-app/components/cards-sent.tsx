@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import classNames from 'clsx'
 import { ethers, utils } from 'ethers'
+import Image from 'next/image'
 
 import { ButtonRevokeCard } from './button-revoke-card'
 import CardRender from './card-render'
@@ -9,6 +10,7 @@ import TimeFromEpoch from './shared/time-from-epoch'
 import { TimeFromUtc } from './shared/time-from-utc'
 import { Dialog, DialogContentXL, DialogTrigger } from './ui/dialog'
 import { EnsName } from './ui/EnsName'
+import expiredImage from '@/assets/images/expired.png'
 import { useAppUserCardsSent } from '@/lib/hooks/app/use-app-users-cards-sent'
 import { useContractAutoLoad } from '@/lib/hooks/use-contract-auto-load'
 
@@ -35,9 +37,13 @@ export const CardsSent = ({ className }: CardsSentProps) => {
             startTime = ethers.BigNumber.from(caveat?.terms).toNumber()
           }
         })
+
+        const expired = endTime && endTime < Date.now() / 1000
+
         return (
           <div key={index} className={classes}>
             <div className="card-blue">
+              {expired && <Image className="absolute bottom-6 right-8 z-10 h-24 w-40" src={expiredImage} alt="Expired" width={100} height={100} />}
               <div className="absolute right-0 top-6 z-0 h-48 w-48 bg-[url('https://cryptologos.cc/logos/usd-coin-usdc-logo.png')] bg-cover opacity-10" />
               <div className="z-10 flex flex-1 justify-between">
                 <div className="">
@@ -68,7 +74,7 @@ export const CardsSent = ({ className }: CardsSentProps) => {
                           </div>
                         </div>
                         <div className="col-span-12 md:col-span-7">
-                          <CardRender to={received.to} amount={received.amount} decimals={received.decimals} label="to" />
+                          <CardRender to={received.to} amount={received.amount} decimals={received.decimals} label="to" expired={expired} />
                           <div className="my-4 flex flex-col gap-2">
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-semibold">Start</span>
