@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 
 import { BigNumber, ethers } from 'ethers'
 import { Controller, useForm } from 'react-hook-form'
+import { FaPlus, FaTrashAlt } from 'react-icons/fa'
 import { useAccount, useEnsAddress, useNetwork, useSigner } from 'wagmi'
 import * as yup from 'yup'
-
-import { FaTrashAlt, FaPlus } from 'react-icons/fa'
 
 import { WalletConnect } from './blockchain/wallet-connect'
 import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
@@ -32,15 +31,15 @@ export function FormIssueCard() {
   const [isSubmitting, setIsSubmitting] = useState<Boolean>(false)
   const [signatures, setSignatures] = useState<any>()
 
-  const [fields, setFields] = useState<number[]>([0]);
+  const [fields, setFields] = useState<number[]>([0])
 
   const addField = () => {
-    setFields([...fields, fields.length]);
-  };
+    setFields([...fields, fields.length])
+  }
 
   const removeField = (index: number) => {
-    setFields(fields.filter((_, idx) => idx !== index));
-  };
+    setFields(fields.filter((_, idx) => idx !== index))
+  }
 
   const ensNameWatch = watch('to')
 
@@ -126,7 +125,7 @@ export function FormIssueCard() {
       const termsAddresses = data.allowedAddresses.reduce((acc: any, address: string) => {
         if (ethers.utils.isAddress(address)) {
           acc = ethers.utils.hexConcat([acc, ethers.utils.hexlify(address)])
-        }else {
+        } else {
           setError('invalidAddress', { type: 'manual', message: 'At least one address is invalid' })
           setIsSubmitting(false)
           return false
@@ -265,28 +264,36 @@ export function FormIssueCard() {
           </div>
         </div>
         <div className="flex w-full flex-col gap-2 md:flex-row md:flex-wrap">
-          <label htmlFor="allowedAddresses" className="w-full block text-sm font-medium text-gray-900 dark:text-white">
+          <label htmlFor="allowedAddresses" className="block w-full text-sm font-medium text-gray-900 dark:text-white">
             Allowed Spending Addresses
           </label>
-          
-          <button type="button" className='btn btn-sm btn-blue text-center max-w-[46px]' onClick={addField}>
-            <FaPlus/>
+
+          <button type="button" className="btn btn-sm btn-blue max-w-[46px] text-center" onClick={addField}>
+            <FaPlus />
           </button>
           <p className="w-full text-xs text-gray-500">Leave empty and the card will be available to spend anywhere.</p>
           {fields.map((field, index) => (
-            <div key={`allowedAddress-${field}`} className="mb-2 md:w-2/3 flex flex-row">
+            <div key={`allowedAddress-${field}`} className="mb-2 flex flex-row md:w-2/3">
               <Controller
-                render={({ field }) => <input className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500' {...field} placeholder="0xd61FA937b8f648901D354f48f6b14995fE468bF3" />}
+                render={({ field }) => (
+                  <input
+                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    {...field}
+                    placeholder="0xd61FA937b8f648901D354f48f6b14995fE468bF3"
+                  />
+                )}
                 control={control}
                 name={`allowedAddresses.${index}`}
                 defaultValue=""
               />
-              <button className='mx-2 btn btn-red text-center' type="button" onClick={() => removeField(index)}>
+              <button className="btn btn-red mx-2 text-center" type="button" onClick={() => removeField(index)}>
                 <FaTrashAlt />
               </button>
             </div>
           ))}
-          {rest.formState.errors.invalidAddress && <p className="text-sm w-full italic text-red-500">{rest.formState.errors?.invalidAddress?.message as string}</p>}
+          {rest.formState.errors.invalidAddress && (
+            <p className="w-full text-sm italic text-red-500">{rest.formState.errors?.invalidAddress?.message as string}</p>
+          )}
         </div>
 
         <div className="mt-4">

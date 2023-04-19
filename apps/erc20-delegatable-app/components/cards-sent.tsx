@@ -42,7 +42,7 @@ export const CardsSent = ({ className }: CardsSentProps) => {
             // split terms into array of every 40 characters ie Addresses
             const cleanedTerms = caveat?.terms.replace(/0x/g, '')
             cleanedTerms.match(/.{1,40}/g)?.forEach((address: string) => {
-              allowedAddresses.push("0x" + address)
+              allowedAddresses.push('0x' + address)
             })
           }
         })
@@ -82,21 +82,18 @@ export const CardsSent = ({ className }: CardsSentProps) => {
                             to learn more.
                           </div>
                           {allowedAddresses && allowedAddresses.length > 0 && (
-                            <div className="content text-base mt-4">
-                              <hr/>
+                            <div className="content mt-4 text-base">
+                              <hr />
                               <p className="mt-2 font-bold">Allowed Spending Addresses</p>
-                              <p className="text-xs">
-                                These are the only addresses where you can spend your USDC Giftee Card.
-                              </p>
+                              <p className="text-xs">These are the only addresses where you can spend your USDC Giftee Card.</p>
                               {allowedAddresses.map((address, index) => {
                                 return (
-                                    <div key={index} className="flex items-center gap-2">
-                                      <span className="text-xs font-semibold">{index + 1}</span>
-                                      <EnsName address={address as `0x${string}`} className="text-xs"/>
-                                    </div>
-                                  )
-                                })
-                              }
+                                  <div key={index} className="flex items-center gap-2">
+                                    <span className="text-xs font-semibold">{index + 1}</span>
+                                    <EnsName address={address as `0x${string}`} className="text-xs" />
+                                  </div>
+                                )
+                              })}
                             </div>
                           )}
                         </div>
