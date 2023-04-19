@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 
 import { BigNumber, ethers } from 'ethers'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useAccount, useEnsAddress, useNetwork, useSigner } from 'wagmi'
 import * as yup from 'yup'
+
+import { FaTrashAlt, FaPlus } from 'react-icons/fa'
 
 import { WalletConnect } from './blockchain/wallet-connect'
 import { BranchIsAuthenticated } from './shared/branch-is-authenticated'
@@ -25,10 +27,20 @@ const validationSchema = yup.object({
 
 export function FormIssueCard() {
   const resolver = useYupValidationResolver(validationSchema)
-  const { handleSubmit, register, setValue, setError, watch, ...rest } = useForm({ resolver })
+  const { control, handleSubmit, register, setValue, setError, watch, ...rest } = useForm({ resolver })
 
   const [isSubmitting, setIsSubmitting] = useState<Boolean>(false)
   const [signatures, setSignatures] = useState<any>()
+
+  const [fields, setFields] = useState<number[]>([0]);
+
+  const addField = () => {
+    setFields([...fields, fields.length]);
+  };
+
+  const removeField = (index: number) => {
+    setFields(fields.filter((_, idx) => idx !== index));
+  };
 
   const ensNameWatch = watch('to')
 
@@ -61,6 +73,8 @@ export function FormIssueCard() {
 
   const onSubmit = async (data: any) => {
     setIsSubmitting(true)
+
+    console.log('data', data)
 
     // check if valid send to address
     if (!ensAddress || !ethers.utils.isAddress(ensAddress)) {
@@ -225,8 +239,31 @@ export function FormIssueCard() {
             <p className="mt-2 text-xs text-gray-500">Leave empty and the card will be available forever.</p>
           </div>
         </div>
+        <div className="flex w-full flex-col gap-2 md:flex-row md:flex-wrap">
+          <label htmlFor="allowedAddresses" className="w-full block text-sm font-medium text-gray-900 dark:text-white">
+            Allowed Spending Addresses
+          </label>
+          
+          <button type="button" className='btn btn-sm btn-blue text-center max-w-[46px]' onClick={addField}>
+            <FaPlus/>
+          </button>
+          <p className="w-full text-xs text-gray-500">Leave empty and the card will be available to spend anywhere.</p>
+          {fields.map((field, index) => (
+            <div key={`allowedAddress-${field}`} className="mb-2 md:w-2/3 flex flex-row">
+              <Controller
+                render={({ field }) => <input className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500' {...field} placeholder="0xd61FA937b8f648901D354f48f6b14995fE468bF3" />}
+                control={control}
+                name={`allowedAddresses.${index}`}
+                defaultValue=""
+              />
+              <button className='mx-2 btn btn-red text-center' type="button" onClick={() => removeField(index)}>
+                <FaTrashAlt />
+              </button>
+            </div>
+          ))}
+        </div>
 
-        <div className="">
+        <div className="mt-4">
           <BranchIsAuthenticated>
             <BranchIsWalletConnected>
               {rest.formState.isSubmitted ? (
