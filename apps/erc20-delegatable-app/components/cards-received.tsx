@@ -23,18 +23,27 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
   const { data } = useAppUserCardsReceived()
   const contractTimestampBeforeEnforcer = useContractAutoLoad('TimestampBeforeEnforcer')
   const contractTimestampAfterEnforcer = useContractAutoLoad('TimestampAfterEnforcer')
+  const contractAllowedAddressEnforcer = useContractAutoLoad('AllowedAddressEnforcer')
 
   return (
     <>
       {data?.content?.map((card, index) => {
         let startTime
         let endTime
+        const allowedAddresses: string[] = []
         card?.delegations?.delegation?.caveats.forEach((caveat: any) => {
           if (caveat?.enforcer === contractTimestampBeforeEnforcer?.address) {
             endTime = ethers.BigNumber.from(caveat?.terms).toNumber()
           }
           if (caveat?.enforcer === contractTimestampAfterEnforcer?.address) {
             startTime = ethers.BigNumber.from(caveat?.terms).toNumber()
+          }
+          if (caveat?.enforcer === contractAllowedAddressEnforcer?.address) {
+            // split terms into array of every 40 characters ie Addresses
+            const cleanedTerms = caveat?.terms.replace(/0x/g, '')
+            cleanedTerms.match(/.{1,40}/g)?.forEach((address: string) => {
+              allowedAddresses.push('0x' + address)
+            })
           }
         })
 
@@ -56,7 +65,7 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
                     <DialogTrigger>
                       <button className="tag tag-light">Claim</button>
                     </DialogTrigger>
-                    <DialogContentXL className="h-screen overflow-y-auto sm:max-h-[550px] md:p-10">
+                    <DialogContentXL className="h-screen overflow-y-auto pb-56 sm:max-h-[550px] md:p-8">
                       <div className="grid grid-cols-12 md:gap-x-10">
                         <div className="col-span-12 mb-2 md:col-span-5">
                           <h3 className="text-4xl font-normal">How It Works</h3>
@@ -74,7 +83,23 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
                             </a>{' '}
                             to learn more.
                           </div>
+                          {allowedAddresses && allowedAddresses.length > 0 && (
+                            <div className="content mt-4 text-base">
+                              <hr />
+                              <p className="mt-2 font-bold">Allowed Spending Addresses</p>
+                              <p className="text-xs">These are the only addresses where you can spend your USDC Giftee Card.</p>
+                              {allowedAddresses.map((address, index) => {
+                                return (
+                                  <div key={index} className="flex items-center gap-2">
+                                    <span className="text-xs font-semibold">{index + 1}</span>
+                                    <EnsName address={address as `0x${string}`} className="text-xs" />
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          )}
                         </div>
+
                         <div className="col-span-12 md:col-span-7">
                           <CardRender to={card.from} amount={card.amount} decimals={card.decimals} label="from" expired={expired} />
                           <div className="my-4 flex flex-col gap-2">

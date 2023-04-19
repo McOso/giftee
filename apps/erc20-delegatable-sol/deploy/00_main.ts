@@ -38,6 +38,14 @@ export default async function deploy(hardhat: HardhatRuntimeEnvironment) {
     log: true,
   });
 
+  await deploy("AllowedAddressEnforcer", {
+    contract: "AllowedAddressEnforcer",
+    from: deployer,
+    args: [],
+    skipIfAlreadyDeployed: false,
+    log: true,
+  });
+
   /*
   for dev testing
 
