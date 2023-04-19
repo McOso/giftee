@@ -116,6 +116,11 @@ export function useContractAutoLoad(contract: string, chainId?: number): any {
             address: '0x70069Bd09d1840Db56356323dBcf6716e05B771E',
             abi: [],
           }
+        case 'AllowedAddressEnforcer':
+          return {
+            address: '0x4DEABda37f7b16d5Ac2d3FbcB687ac7FBcB82461',
+            abi: [],
+          }
         case 'USDC':
           return {
             address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',

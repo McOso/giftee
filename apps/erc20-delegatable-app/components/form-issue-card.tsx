@@ -50,6 +50,7 @@ export function FormIssueCard() {
   const contractAllowanceEnforcer = useContractAutoLoad('ERC20FromAllowanceEnforcer')
   const contractTimestampBeforeEnforcer = useContractAutoLoad('TimestampBeforeEnforcer')
   const contractTimestampAfterEnforcer = useContractAutoLoad('TimestampAfterEnforcer')
+  const contractAllowedAddressEnforcer = useContractAutoLoad('AllowedAddressEnforcer')
 
   const contractUSDCAddress = useContractAutoLoad('USDC')
 
@@ -117,6 +118,30 @@ export function FormIssueCard() {
       enforcers.push({
         enforcer: contractTimestampBeforeEnforcer.address,
         terms: timestampBeforeRawValue,
+      })
+    }
+
+    if (data.allowedAddresses && data.allowedAddresses.length > 0 && data.allowedAddresses[0] !== '') {
+      // handle allowed addresses enforcer
+      const termsAddresses = data.allowedAddresses.reduce((acc: any, address: string) => {
+        if (ethers.utils.isAddress(address)) {
+          acc = ethers.utils.hexConcat([acc, ethers.utils.hexlify(address)])
+        }else {
+          setError('invalidAddress', { type: 'manual', message: 'At least one address is invalid' })
+          setIsSubmitting(false)
+          return false
+        }
+        return acc
+      })
+
+      if (!termsAddresses) {
+        // this means there was an invalid address
+        return false
+      }
+
+      enforcers.push({
+        enforcer: contractAllowedAddressEnforcer.address,
+        terms: termsAddresses,
       })
     }
 
@@ -261,6 +286,7 @@ export function FormIssueCard() {
               </button>
             </div>
           ))}
+          {rest.formState.errors.invalidAddress && <p className="text-sm w-full italic text-red-500">{rest.formState.errors?.invalidAddress?.message as string}</p>}
         </div>
 
         <div className="mt-4">
