@@ -65,7 +65,7 @@ export const CardsReceived = ({ className }: CardsReceivedProps) => {
                     <DialogTrigger>
                       <button className="tag tag-light">Claim</button>
                     </DialogTrigger>
-                    <DialogContentXL className="h-screen overflow-y-auto sm:max-h-[550px] md:p-8">
+                    <DialogContentXL className="h-screen overflow-y-auto pb-56 sm:max-h-[550px] md:p-8">
                       <div className="grid grid-cols-12 md:gap-x-10">
                         <div className="col-span-12 mb-2 md:col-span-5">
                           <h3 className="text-4xl font-normal">How It Works</h3>
