@@ -2,7 +2,7 @@
 pragma solidity 0.8.15;
 
 import { Delegatable } from "./Delegatable.sol";
-import { DelegatableCore } from "@delegatable/delegatable-sol/contracts/DelegatableCore.sol";
+import { DelegatableCore } from "./DelegatableCore.sol";
 import "@delegatable/delegatable-sol/contracts/TypesAndDecoders.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol";

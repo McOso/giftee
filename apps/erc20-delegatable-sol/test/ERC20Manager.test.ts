@@ -88,6 +88,7 @@ describe('ERC20Manager', () => {
   let wallet4: Wallet;
   let pk0: string;
   let pk1: string;
+  let pk2: string;
   let erc20FromAllowanceEnforcer: Contract;
   let erc20FromAllowanceEnforcerFactory: ContractFactory;
   let timestampBeforeEnforcer: Contract;
@@ -111,6 +112,7 @@ describe('ERC20Manager', () => {
     allowedAddressEnforcerFactory = await ethers.getContractFactory('AllowedAddressEnforcer');
     pk0 = wallet0._signingKey().privateKey;
     pk1 = wallet1._signingKey().privateKey;
+    pk2 = wallet2._signingKey().privateKey;
   });
 
   beforeEach(async () => {
@@ -270,6 +272,89 @@ describe('ERC20Manager', () => {
       },
     ]);
     expect(await erc20PermitToken.balanceOf(wallet1.address)).to.equal(totalApprovedAmount);
+  });
+
+  it('should FAIL to INVOKE transferProxy with Improper signer', async () => {
+    expect(
+      await erc20PermitToken.allowance(wallet0.address, erc20ManagerContract.address),
+    ).to.equal(0);
+    const deadline = ethers.constants.MaxUint256;
+    const totalApprovedAmount = ethers.utils.parseEther('0.5');
+    const { v, r, s } = await getPermitSignature(
+      wallet0,
+      erc20PermitToken,
+      erc20ManagerContract.address,
+      totalApprovedAmount,
+      deadline,
+    );
+
+    const inputTerms = ethers.utils.hexZeroPad(ethers.utils.parseEther('0.5').toHexString(), 32);
+
+    const _delegation = generateDelegation(
+      CONTRACT_NAME,
+      erc20ManagerContract,
+      pk0,
+      wallet1.address,
+      [
+        {
+          enforcer: erc20FromAllowanceEnforcer.address,
+          terms: inputTerms,
+        },
+      ],
+    );
+
+    const INVOCATION_MESSAGE = {
+      replayProtection: {
+        nonce: '0x01',
+        queue: '0x00',
+      },
+      batch: [
+        {
+          authority: [],
+          transaction: {
+            to: erc20ManagerContract.address,
+            gasLimit: '210000000000000000',
+            data: (
+              await erc20ManagerContract.populateTransaction.approveTransferProxy(
+                erc20PermitToken.address,
+                wallet0.address,
+                totalApprovedAmount,
+                deadline,
+                v,
+                r,
+                s,
+              )
+            ).data,
+          },
+        },
+        {
+          authority: [_delegation],
+          transaction: {
+            to: erc20ManagerContract.address,
+            gasLimit: '210000000000000000',
+            data: (
+              await erc20ManagerContract.populateTransaction.transferProxy(
+                erc20PermitToken.address,
+                wallet1.address,
+                totalApprovedAmount,
+              )
+            ).data,
+          },
+        },
+      ],
+    };
+
+    // this should fail because the signer is not the delegate
+    const invocation = delegatableUtils.signInvocation(INVOCATION_MESSAGE, pk2);
+
+    await expect(
+      erc20ManagerContract.invoke([
+        {
+          signature: invocation.signature,
+          invocations: invocation.invocations,
+        },
+      ]),
+    ).to.be.revertedWith('DelegatableCore:invalid-delegate');
   });
 
   it('should FAIL to INVOKE transferProxy with greater than approved amount', async () => {

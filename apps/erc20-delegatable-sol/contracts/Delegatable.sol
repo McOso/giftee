@@ -4,7 +4,7 @@ pragma solidity 0.8.15;
 // import "hardhat/console.sol";
 import {EIP712DOMAIN_TYPEHASH} from "@delegatable/delegatable-sol/contracts/TypesAndDecoders.sol";
 import {Delegation, Invocation, Invocations, SignedInvocation, SignedDelegation} from "@delegatable/delegatable-sol/contracts/CaveatEnforcer.sol";
-import {DelegatableCore} from "@delegatable/delegatable-sol/contracts/DelegatableCore.sol";
+import {DelegatableCore} from "./DelegatableCore.sol";
 import {IDelegatable} from "@delegatable/delegatable-sol/contracts/interfaces/IDelegatable.sol";
 
 abstract contract Delegatable is IDelegatable, DelegatableCore {

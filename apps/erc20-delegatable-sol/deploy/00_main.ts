@@ -14,37 +14,37 @@ export default async function deploy(hardhat: HardhatRuntimeEnvironment) {
     log: true,
   });
 
-  await deploy("ERC20FromAllowanceEnforcer", {
-    contract: "ERC20FromAllowanceEnforcer",
-    from: deployer,
-    args: [],
-    skipIfAlreadyDeployed: false,
-    log: true,
-  });
+  // await deploy("ERC20FromAllowanceEnforcer", {
+  //   contract: "ERC20FromAllowanceEnforcer",
+  //   from: deployer,
+  //   args: [],
+  //   skipIfAlreadyDeployed: false,
+  //   log: true,
+  // });
 
-  await deploy("TimestampBeforeEnforcer", {
-    contract: "TimestampBeforeEnforcer",
-    from: deployer,
-    args: [],
-    skipIfAlreadyDeployed: false,
-    log: true,
-  });
+  // await deploy("TimestampBeforeEnforcer", {
+  //   contract: "TimestampBeforeEnforcer",
+  //   from: deployer,
+  //   args: [],
+  //   skipIfAlreadyDeployed: false,
+  //   log: true,
+  // });
 
-  await deploy("TimestampAfterEnforcer", {
-    contract: "TimestampAfterEnforcer",
-    from: deployer,
-    args: [],
-    skipIfAlreadyDeployed: false,
-    log: true,
-  });
+  // await deploy("TimestampAfterEnforcer", {
+  //   contract: "TimestampAfterEnforcer",
+  //   from: deployer,
+  //   args: [],
+  //   skipIfAlreadyDeployed: false,
+  //   log: true,
+  // });
 
-  await deploy("AllowedAddressEnforcer", {
-    contract: "AllowedAddressEnforcer",
-    from: deployer,
-    args: [],
-    skipIfAlreadyDeployed: false,
-    log: true,
-  });
+  // await deploy("AllowedAddressEnforcer", {
+  //   contract: "AllowedAddressEnforcer",
+  //   from: deployer,
+  //   args: [],
+  //   skipIfAlreadyDeployed: false,
+  //   log: true,
+  // });
 
   /*
   for dev testing
